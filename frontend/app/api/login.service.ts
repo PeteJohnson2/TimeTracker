@@ -16,7 +16,25 @@ import type { LoginRequest, LoginResponse } from "~/model/login";
 
 export const apiPrefix = "/rest";
 
-export const apiUrl = import.meta.env.VITE_API_URL;
+let apiUrl = import.meta.env.VITE_API_URL || "";
+
+// Load runtime config if available
+export async function initializeApiUrl(): Promise<void> {
+  try {
+    const response = await fetch("/config.json");
+    if (response.ok) {
+      const config = await response.json();
+      apiUrl = config.apiUrl || apiUrl;
+    }
+  } catch (error) {
+    console.warn("Could not load runtime config:", error);
+    // Fall back to build-time environment variable
+  }
+}
+
+export function getApiUrl(): string {
+  return apiUrl;
+}
 
 export class ApiError extends Error {
   status: number;
@@ -46,7 +64,7 @@ export const postLogin = async function (
 ): Promise<LoginResponse> {
   const requestOptions = loginSigninOptions(email, "", password1, controller);  
   const result = await fetch(
-    `${apiUrl}${apiPrefix}/login/login`,
+    `${getApiUrl()}${apiPrefix}/login/login`,
     requestOptions,
   );
   return handleResponse<LoginResponse>(result);
@@ -65,7 +83,7 @@ export const postSignin = async function (
     controller,
   );
   const result = await fetch(
-    `${apiUrl}${apiPrefix}/login/signin`,
+    `${getApiUrl()}${apiPrefix}/login/signin`,
     requestOptions,
   );
   return handleResponse<LoginResponse>(result);
@@ -96,7 +114,7 @@ interface RefreshToken {
 export const updateToken = () => {  
   setInterval(async () => {
     const abortController = new AbortController();
-    const response = await fetch(`${apiUrl}${apiPrefix}/login/refresh`, {
+    const response = await fetch(`${getApiUrl()}${apiPrefix}/login/refresh`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

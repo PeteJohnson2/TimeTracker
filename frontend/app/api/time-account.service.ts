@@ -10,7 +10,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { apiPrefix, apiUrl, handleResponse } from "./login.service";
+import { apiPrefix, getApiUrl, handleResponse } from "./login.service";
 import type { TimeAccountDto } from "~/model/time-account";
 
 export const getTimeAccountsByManager = async (
@@ -20,7 +20,7 @@ export const getTimeAccountsByManager = async (
 ) => {
   const requestOptions = request(jwtToken, controller);
   const result = await fetch(
-    `${apiUrl}${apiPrefix}/account/manager/${managerId}`,
+    `${getApiUrl()}${apiPrefix}/account/manager/${managerId}`,
     requestOptions,
   );
   return handleResponse<TimeAccountDto[]>(result);
@@ -34,7 +34,7 @@ export const getTimeAccountsByUser = async (
 ) => {
   const requestOptions = request(jwtToken, controller);
   const result = await fetch(
-    `${apiUrl}${apiPrefix}/account/user/${userId}/day/${date.toISOString().split('T')[0]}`,
+    `${getApiUrl()}${apiPrefix}/account/user/${userId}/day/${date.toISOString().split('T')[0]}`,
     requestOptions,
   );
   return handleResponse<TimeAccountDto[]>(result);
@@ -48,7 +48,7 @@ export const postTimeAccount = async (
   const requestOptions = request(jwtToken, controller, HttpMethod.POST);
   requestOptions.body = JSON.stringify(timeAccount);
   const result = await fetch(
-    `${apiUrl}${apiPrefix}/account/${timeAccount.managerId}`,
+    `${getApiUrl()}${apiPrefix}/account/${timeAccount.managerId}`,
     requestOptions,
   );
   return handleResponse<TimeAccountDto>(result);

@@ -19,8 +19,12 @@ FROM nginx:stable-alpine
 # Copy build output to nginx html folder
 COPY --from=build-env /app/build/client /usr/share/nginx/html
 
+# Copy and make entrypoint script executable
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
 # Expose port
 EXPOSE 8080
 
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start with entrypoint script
+ENTRYPOINT ["/docker-entrypoint.sh"]

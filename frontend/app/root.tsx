@@ -23,6 +23,8 @@ import type { Route } from "./+types/root";
 import "./root.css";
 import { Provider } from "jotai";
 import "./i18n/config";
+import { useEffect } from "react";
+import { initializeApiUrl } from "./api/login.service";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -62,6 +64,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  useEffect(() => {
+    initializeApiUrl();
+  }, []);
+
   return <Outlet />;
 }
 

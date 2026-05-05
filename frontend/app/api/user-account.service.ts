@@ -13,12 +13,12 @@
 
 import type { UserAccountDto } from "~/model/user-account"
 import { HttpMethod, request } from "./time-account.service";
-import { apiPrefix, apiUrl, handleResponse } from "./login.service";
+import { apiPrefix, getApiUrl, handleResponse } from "./login.service";
 
 export const getUserTimeByIdAndDay = async (entryDate: Date, timeAccountIds: string[], jwtToken: string, controller: AbortController | null) => {
     const requestOptions = request(jwtToken, controller);
     const result = await fetch(
-        `${apiUrl}${apiPrefix}/time/day/${entryDate.toISOString().split('T')[0]}/accounts/${timeAccountIds.join(',')}`,
+        `${getApiUrl()}${apiPrefix}/time/day/${entryDate.toISOString().split('T')[0]}/accounts/${timeAccountIds.join(',')}`,
         requestOptions,
       );    
     return handleResponse<UserAccountDto[]>(result);
@@ -28,7 +28,7 @@ export const postUserTime = async (id: string | null, entryDate: Date, comment: 
     const requestOptions = request(jwtToken, controller, HttpMethod.POST);
     requestOptions.body = JSON.stringify({id: id, entryDate: entryDate, comment: comment, duration: duration, timeAccountId: timeAccountId});
     const result = await fetch(
-        `${apiUrl}${apiPrefix}/time/day/${entryDate.toISOString().split('T')[0]}/accounts/${timeAccountId}`,
+        `${getApiUrl()}${apiPrefix}/time/day/${entryDate.toISOString().split('T')[0]}/accounts/${timeAccountId}`,
         requestOptions,
       );    
     return handleResponse<UserAccountDto>(result);

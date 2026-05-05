@@ -11,14 +11,14 @@
     limitations under the License.
 */
 import type { UserDto } from "~/model/user";
-import { apiPrefix, apiUrl, handleResponse } from "./login.service";
+import { apiPrefix, getApiUrl, handleResponse } from "./login.service";
 
 export const getUsers = async (
   jwtToken: string,
   controller: AbortController | null,
 ) => {
   const requestOptions = getOptions(jwtToken, controller);
-  const result = await fetch(`${apiUrl}${apiPrefix}/user/all`, requestOptions);
+  const result = await fetch(`${getApiUrl()}${apiPrefix}/user/all`, requestOptions);
   return handleResponse<UserDto[]>(result);
 };
 
