@@ -1,0 +1,7 @@
+PostgreSQL has been deployed.
+
+Get the service endpoint:
+  kubectl get svc {{ include "postgres.fullname" . }}
+
+Connect to the database:
+  PGPASSWORD="{{ .Values.postgresql.password }}" psql -h {{ include "postgres.fullname" . }} -U {{ .Values.postgresql.user }} -d {{ .Values.postgresql.database }}
