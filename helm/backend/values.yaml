@@ -1,0 +1,21 @@
+image:
+  repository: angular2guy/timetracker-backend
+  tag: latest
+  pullPolicy: IfNotPresent
+
+env:
+  NODE_ENV: production
+  PORT: "3443"
+  DB_HOST: localhost
+  DB_PORT: "5432"
+  DB_USERNAME: sven1
+  DB_PASSWORD: sven1
+  DB_DATABASE: timetracker
+
+knative:
+  minScale: 0
+  maxScale: 3
+  concurrencyLimit: 250
+
+service:
+  port: 3443
